@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DD057ED1-6C1A-4C96-9932-2D0B53992867}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ValueImage</RootNamespace>
+    <AssemblyName>ValueImage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\DynamicLink\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ValueMathHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DynamicLink\ValueMathHelper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ImageFactory\Base\ImageBase.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseDisNoise.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseDivision.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseEdge.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseFilter.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseFrequency.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseGeometry.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseGray.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseNoise.cs" />
+    <Compile Include="ImageFactory\Base\ImageBaseOther.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24DisNoise.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Division.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Edge.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Filter.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Frequency.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Geometry.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Gray.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Noise.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Other.cs" />
+    <Compile Include="Infrastructure\ColorBytes.cs" />
+    <Compile Include="Infrastructure\DirectType.cs" />
+    <Compile Include="Infrastructure\FilterWindowType.cs" />
+    <Compile Include="Infrastructure\GaussFilterType.cs" />
+    <Compile Include="Infrastructure\GrayscaleType.cs" />
+    <Compile Include="Infrastructure\MaskType.cs" />
+    <Compile Include="Infrastructure\OperatorSet.cs" />
+    <Compile Include="Infrastructure\OrientationType.cs" />
+    <Compile Include="Infrastructure\TemplateType.cs" />
+    <Compile Include="Infrastructure\NoiseType.cs" />
+    <Compile Include="Infrastructure\RateFilterType.cs" />
+    <Compile Include="Infrastructure\WaveletLowpassType.cs" />
+    <Compile Include="Infrastructure\ZoomType.cs" />
+    <Compile Include="Interface\IDisNoise.cs" />
+    <Compile Include="Interface\IDivision.cs" />
+    <Compile Include="Interface\IEdge.cs" />
+    <Compile Include="Interface\IFilter.cs" />
+    <Compile Include="Interface\IFrequency.cs" />
+    <Compile Include="Interface\IGeometry.cs" />
+    <Compile Include="Interface\IGray.cs" />
+    <Compile Include="Interface\INoise.cs" />
+    <Compile Include="Interface\IOther.cs" />
+    <Compile Include="Interface\IValueImage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueImageManager.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
