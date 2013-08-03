@@ -34,8 +34,8 @@ namespace ValueImage.ImageFactory.Bit24
         {
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;
-            Debug.Assert(mathHelper.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(singleWidth)) { base.UnlockBits(); return; }
+            Debug.Assert(valueMath.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(singleWidth)) { base.UnlockBits(); return; }
 
             Int32 length = singleWidth * Height;
             Byte[] tempb = new Byte[length];
@@ -71,8 +71,8 @@ namespace ValueImage.ImageFactory.Bit24
         {
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;
-            Debug.Assert(mathHelper.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(singleWidth)) { base.UnlockBits(); return; }
+            Debug.Assert(valueMath.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(singleWidth)) { base.UnlockBits(); return; }
 
             Int32 length = singleWidth * Height;
             Byte[] tempb = new Byte[length];
@@ -108,8 +108,8 @@ namespace ValueImage.ImageFactory.Bit24
         {
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;
-            Debug.Assert(mathHelper.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(singleWidth)) { base.UnlockBits(); return; }
+            Debug.Assert(valueMath.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(singleWidth)) { base.UnlockBits(); return; }
 
             Int32 length = singleWidth * Height;
             Byte[] tempb = new Byte[length];
@@ -145,8 +145,8 @@ namespace ValueImage.ImageFactory.Bit24
         {
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;
-            Debug.Assert(mathHelper.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(singleWidth)) { base.UnlockBits(); return; }
+            Debug.Assert(valueMath.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(singleWidth)) { base.UnlockBits(); return; }
 
             Int32 length = singleWidth * Height;
             Byte[] tempb = new Byte[length];
@@ -188,8 +188,8 @@ namespace ValueImage.ImageFactory.Bit24
 
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;
-            Debug.Assert(mathHelper.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(singleWidth)) { base.UnlockBits(); return; }
+            Debug.Assert(valueMath.IsPow2(singleWidth), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(singleWidth)) { base.UnlockBits(); return; }
 
             Int32 length = singleWidth * Height;
             Byte[] tempb = new Byte[length];

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ValueImage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sky123.Org")]
+[assembly: AssemblyCompany("zyValue")]
 [assembly: AssemblyProduct("ValueImage")]
-[assembly: AssemblyCopyright("Copyright © Sky123.Org 2013")]
+[assembly: AssemblyCopyright("Copyright © zformular 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

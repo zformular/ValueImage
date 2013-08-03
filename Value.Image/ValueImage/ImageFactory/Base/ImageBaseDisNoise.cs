@@ -38,9 +38,7 @@ namespace ValueImage.ImageFactory.Base
                     }
                 }
                 if (!hasZero)
-                {
                     result[i] = 0;
-                }
             }
         }
 
@@ -110,7 +108,7 @@ namespace ValueImage.ImageFactory.Base
                 {
                     list.Add(data[set[j]] * template[j]);
                 }
-                Int32 max = mathHelper.Max(list.ToArray());
+                Int32 max = MathHelper.ValueMath.Max(list.ToArray());
                 result[i] = Convert.ToByte(max);
                 list.Clear();
             }
@@ -148,10 +146,90 @@ namespace ValueImage.ImageFactory.Base
                 {
                     list.Add(data[set[j]] * template[j]);
                 }
-                Int32 min = mathHelper.Min(list.ToArray());
+                Int32 min = MathHelper.ValueMath.Min(list.ToArray());
                 result[i] = Convert.ToByte(min);
                 list.Clear();
             }
+        }
+
+        /// <summary>
+        ///  kFill滤波器(不完全)
+        /// </summary>
+        /// <param name="data">二维数据</param>
+        /// <param name="width">宽度</param>
+        /// <param name="height">高度</param>
+        protected void kfillFilter(ref Byte[] data, Int32 width, Int32 height)
+        {
+            Int32[] set = null;
+            Boolean loop = true;
+            do
+            {
+                loop = false;
+                #region 填充黑点
+
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        Int32 index = j * width + i;
+                        if (data[index] == 0)
+                        {
+                            set = getFilterWindow3x3(index, width, height, DirectType.Clock);
+
+                            Int32 n = 0;
+                            for (int x = 1; x < set.Length; x++)
+                            {
+                                if (data[set[x]] == 255) n++;
+                            }
+                            Int32 r = 0;
+                            for (int x = 2; x < set.Length; x += 2)
+                            {
+                                if (data[set[x]] == 255) r++;
+                            }
+                            if (n > (6) || ((n == 6) && r == 2))
+                            {
+                                data[index] = 255;
+                                loop = true;
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+
+                #region 填充白点
+
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        Int32 index = j * width + i;
+                        if (data[index] == 255)
+                        {
+                            set = getFilterWindow3x3(index, width, height, DirectType.Clock);
+                            Int32 n = 0;
+                            for (int x = 1; x < set.Length; x++)
+                            {
+                                if (data[set[x]] == 0)
+                                    n++;
+                            }
+                            Int32 r = 0;
+                            for (int x = 2; x < set.Length; x += 2)
+                            {
+                                if (data[set[x]] == 0)
+                                    r++;
+                            }
+                            if (n > (6) || ((n == 6) && r == 2))
+                            {
+                                data[index] = 0;
+                                loop = true;
+                            }
+                        }
+                    }
+                }
+
+                #endregion
+            } while (loop);
         }
     }
 }

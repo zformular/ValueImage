@@ -30,6 +30,7 @@
         {
             this.PicShow = new System.Windows.Forms.PictureBox();
             this.GrbDisNoise = new System.Windows.Forms.GroupBox();
+            this.BtnkFill = new System.Windows.Forms.Button();
             this.BtnMorphologic = new System.Windows.Forms.Button();
             this.BtnGrayClose = new System.Windows.Forms.Button();
             this.BtnGrayOpen = new System.Windows.Forms.Button();
@@ -61,6 +62,8 @@
             this.BtnRayleighNoise = new System.Windows.Forms.Button();
             this.BtnGaussNoise = new System.Windows.Forms.Button();
             this.GrbFrequency = new System.Windows.Forms.GroupBox();
+            this.BtnDensity = new System.Windows.Forms.Button();
+            this.BtnGabor = new System.Windows.Forms.Button();
             this.BtnProjectionVert = new System.Windows.Forms.Button();
             this.BtnProjectionHori = new System.Windows.Forms.Button();
             this.BtnPhase = new System.Windows.Forms.Button();
@@ -80,18 +83,24 @@
             this.BtnGaussEdge = new System.Windows.Forms.Button();
             this.BtnMaskEdge = new System.Windows.Forms.Button();
             this.GrbDivision = new System.Windows.Forms.GroupBox();
+            this.ZhangExpendThinning = new System.Windows.Forms.Button();
             this.BtnZhangThinning = new System.Windows.Forms.Button();
             this.BtnUniformQuantization = new System.Windows.Forms.Button();
             this.BtnCutRectangle = new System.Windows.Forms.Button();
             this.BtnDivisionWord = new System.Windows.Forms.Button();
             this.GrdOther = new System.Windows.Forms.GroupBox();
+            this.BtnNoiseKiller = new System.Windows.Forms.Button();
+            this.BtnFillBreakpoint = new System.Windows.Forms.Button();
+            this.BtnBoxImage = new System.Windows.Forms.Button();
             this.BtnInvertColor = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.GrdGeometry = new System.Windows.Forms.GroupBox();
+            this.BtnRotate = new System.Windows.Forms.Button();
+            this.BtnSplice = new System.Windows.Forms.Button();
             this.BtnAmphilinearity = new System.Windows.Forms.Button();
             this.BtnZoomNN = new System.Windows.Forms.Button();
-            this.ZhangExpendThinning = new System.Windows.Forms.Button();
+            this.BtnShewCorrection = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PicShow)).BeginInit();
             this.GrbDisNoise.SuspendLayout();
             this.GrbGray.SuspendLayout();
@@ -117,6 +126,7 @@
             // 
             // GrbDisNoise
             // 
+            this.GrbDisNoise.Controls.Add(this.BtnkFill);
             this.GrbDisNoise.Controls.Add(this.BtnMorphologic);
             this.GrbDisNoise.Controls.Add(this.BtnGrayClose);
             this.GrbDisNoise.Controls.Add(this.BtnGrayOpen);
@@ -132,6 +142,16 @@
             this.GrbDisNoise.TabIndex = 1;
             this.GrbDisNoise.TabStop = false;
             this.GrbDisNoise.Text = "去噪";
+            // 
+            // BtnkFill
+            // 
+            this.BtnkFill.Location = new System.Drawing.Point(393, 20);
+            this.BtnkFill.Name = "BtnkFill";
+            this.BtnkFill.Size = new System.Drawing.Size(96, 23);
+            this.BtnkFill.TabIndex = 15;
+            this.BtnkFill.Text = "kFill(不完全)";
+            this.BtnkFill.UseVisualStyleBackColor = true;
+            this.BtnkFill.Click += new System.EventHandler(this.BtnkFill_Click);
             // 
             // BtnMorphologic
             // 
@@ -397,7 +417,7 @@
             this.GrdNoise.Controls.Add(this.BtnIndexNoise);
             this.GrdNoise.Controls.Add(this.BtnRayleighNoise);
             this.GrdNoise.Controls.Add(this.BtnGaussNoise);
-            this.GrdNoise.Location = new System.Drawing.Point(418, 199);
+            this.GrdNoise.Location = new System.Drawing.Point(418, 197);
             this.GrdNoise.Name = "GrdNoise";
             this.GrdNoise.Size = new System.Drawing.Size(501, 55);
             this.GrdNoise.TabIndex = 5;
@@ -446,17 +466,39 @@
             // 
             // GrbFrequency
             // 
+            this.GrbFrequency.Controls.Add(this.BtnDensity);
+            this.GrbFrequency.Controls.Add(this.BtnGabor);
             this.GrbFrequency.Controls.Add(this.BtnProjectionVert);
             this.GrbFrequency.Controls.Add(this.BtnProjectionHori);
             this.GrbFrequency.Controls.Add(this.BtnPhase);
             this.GrbFrequency.Controls.Add(this.BtnAmplitude);
             this.GrbFrequency.Controls.Add(this.BtnFFT);
-            this.GrbFrequency.Location = new System.Drawing.Point(418, 255);
+            this.GrbFrequency.Location = new System.Drawing.Point(418, 253);
             this.GrbFrequency.Name = "GrbFrequency";
-            this.GrbFrequency.Size = new System.Drawing.Size(501, 55);
+            this.GrbFrequency.Size = new System.Drawing.Size(501, 80);
             this.GrbFrequency.TabIndex = 6;
             this.GrbFrequency.TabStop = false;
             this.GrbFrequency.Text = "频率";
+            // 
+            // BtnDensity
+            // 
+            this.BtnDensity.Location = new System.Drawing.Point(105, 43);
+            this.BtnDensity.Name = "BtnDensity";
+            this.BtnDensity.Size = new System.Drawing.Size(96, 23);
+            this.BtnDensity.TabIndex = 9;
+            this.BtnDensity.Text = "密度(矩形)";
+            this.BtnDensity.UseVisualStyleBackColor = true;
+            this.BtnDensity.Click += new System.EventHandler(this.BtnDensity_Click);
+            // 
+            // BtnGabor
+            // 
+            this.BtnGabor.Location = new System.Drawing.Point(9, 43);
+            this.BtnGabor.Name = "BtnGabor";
+            this.BtnGabor.Size = new System.Drawing.Size(96, 23);
+            this.BtnGabor.TabIndex = 8;
+            this.BtnGabor.Text = "Gabor滤波";
+            this.BtnGabor.UseVisualStyleBackColor = true;
+            this.BtnGabor.Click += new System.EventHandler(this.BtnGabor_Click);
             // 
             // BtnProjectionVert
             // 
@@ -519,7 +561,7 @@
             this.GrbFilter.Controls.Add(this.BtnBandpassFilter);
             this.GrbFilter.Controls.Add(this.BtnHighpassFilter);
             this.GrbFilter.Controls.Add(this.BtnLowpassFilter);
-            this.GrbFilter.Location = new System.Drawing.Point(418, 310);
+            this.GrbFilter.Location = new System.Drawing.Point(418, 334);
             this.GrbFilter.Name = "GrbFilter";
             this.GrbFilter.Size = new System.Drawing.Size(501, 79);
             this.GrbFilter.TabIndex = 7;
@@ -620,7 +662,7 @@
             // 
             this.GrdEdge.Controls.Add(this.BtnGaussEdge);
             this.GrdEdge.Controls.Add(this.BtnMaskEdge);
-            this.GrdEdge.Location = new System.Drawing.Point(418, 389);
+            this.GrdEdge.Location = new System.Drawing.Point(418, 413);
             this.GrdEdge.Name = "GrdEdge";
             this.GrdEdge.Size = new System.Drawing.Size(501, 53);
             this.GrdEdge.TabIndex = 8;
@@ -655,12 +697,22 @@
             this.GrbDivision.Controls.Add(this.BtnUniformQuantization);
             this.GrbDivision.Controls.Add(this.BtnCutRectangle);
             this.GrbDivision.Controls.Add(this.BtnDivisionWord);
-            this.GrbDivision.Location = new System.Drawing.Point(418, 442);
+            this.GrbDivision.Location = new System.Drawing.Point(418, 466);
             this.GrbDivision.Name = "GrbDivision";
-            this.GrbDivision.Size = new System.Drawing.Size(501, 100);
+            this.GrbDivision.Size = new System.Drawing.Size(501, 76);
             this.GrbDivision.TabIndex = 9;
             this.GrbDivision.TabStop = false;
             this.GrbDivision.Text = "分割";
+            // 
+            // ZhangExpendThinning
+            // 
+            this.ZhangExpendThinning.Location = new System.Drawing.Point(9, 43);
+            this.ZhangExpendThinning.Name = "ZhangExpendThinning";
+            this.ZhangExpendThinning.Size = new System.Drawing.Size(96, 23);
+            this.ZhangExpendThinning.TabIndex = 23;
+            this.ZhangExpendThinning.Text = "Zhang扩展细化";
+            this.ZhangExpendThinning.UseVisualStyleBackColor = true;
+            this.ZhangExpendThinning.Click += new System.EventHandler(this.ZhangExpendThinning_Click);
             // 
             // BtnZhangThinning
             // 
@@ -704,14 +756,48 @@
             // 
             // GrdOther
             // 
+            this.GrdOther.Controls.Add(this.BtnShewCorrection);
+            this.GrdOther.Controls.Add(this.BtnNoiseKiller);
+            this.GrdOther.Controls.Add(this.BtnFillBreakpoint);
+            this.GrdOther.Controls.Add(this.BtnBoxImage);
             this.GrdOther.Controls.Add(this.BtnInvertColor);
             this.GrdOther.Controls.Add(this.BtnHistEqualization);
             this.GrdOther.Location = new System.Drawing.Point(12, 497);
             this.GrdOther.Name = "GrdOther";
-            this.GrdOther.Size = new System.Drawing.Size(400, 112);
+            this.GrdOther.Size = new System.Drawing.Size(400, 129);
             this.GrdOther.TabIndex = 10;
             this.GrdOther.TabStop = false;
             this.GrdOther.Text = "其他";
+            // 
+            // BtnNoiseKiller
+            // 
+            this.BtnNoiseKiller.Location = new System.Drawing.Point(6, 49);
+            this.BtnNoiseKiller.Name = "BtnNoiseKiller";
+            this.BtnNoiseKiller.Size = new System.Drawing.Size(96, 23);
+            this.BtnNoiseKiller.TabIndex = 21;
+            this.BtnNoiseKiller.Text = "噪声杀手";
+            this.BtnNoiseKiller.UseVisualStyleBackColor = true;
+            this.BtnNoiseKiller.Click += new System.EventHandler(this.BtnNoiseKiller_Click);
+            // 
+            // BtnFillBreakpoint
+            // 
+            this.BtnFillBreakpoint.Location = new System.Drawing.Point(298, 20);
+            this.BtnFillBreakpoint.Name = "BtnFillBreakpoint";
+            this.BtnFillBreakpoint.Size = new System.Drawing.Size(96, 22);
+            this.BtnFillBreakpoint.TabIndex = 20;
+            this.BtnFillBreakpoint.Text = "连接断点";
+            this.BtnFillBreakpoint.UseVisualStyleBackColor = true;
+            this.BtnFillBreakpoint.Click += new System.EventHandler(this.BtnFillBreakpoint_Click);
+            // 
+            // BtnBoxImage
+            // 
+            this.BtnBoxImage.Location = new System.Drawing.Point(198, 20);
+            this.BtnBoxImage.Name = "BtnBoxImage";
+            this.BtnBoxImage.Size = new System.Drawing.Size(96, 23);
+            this.BtnBoxImage.TabIndex = 19;
+            this.BtnBoxImage.Text = "框选图片";
+            this.BtnBoxImage.UseVisualStyleBackColor = true;
+            this.BtnBoxImage.Click += new System.EventHandler(this.BtnBoxImage_Click);
             // 
             // BtnInvertColor
             // 
@@ -744,16 +830,38 @@
             // 
             // GrdGeometry
             // 
+            this.GrdGeometry.Controls.Add(this.BtnRotate);
+            this.GrdGeometry.Controls.Add(this.BtnSplice);
             this.GrdGeometry.Controls.Add(this.BtnAmphilinearity);
             this.GrdGeometry.Controls.Add(this.BtnZoomNN);
             this.GrdGeometry.Controls.Add(this.BtnMove);
             this.GrdGeometry.Controls.Add(this.BtnLinearChange);
-            this.GrdGeometry.Location = new System.Drawing.Point(418, 543);
+            this.GrdGeometry.Location = new System.Drawing.Point(418, 542);
             this.GrdGeometry.Name = "GrdGeometry";
-            this.GrdGeometry.Size = new System.Drawing.Size(501, 55);
+            this.GrdGeometry.Size = new System.Drawing.Size(501, 84);
             this.GrdGeometry.TabIndex = 13;
             this.GrdGeometry.TabStop = false;
             this.GrdGeometry.Text = "几何";
+            // 
+            // BtnRotate
+            // 
+            this.BtnRotate.Location = new System.Drawing.Point(9, 43);
+            this.BtnRotate.Name = "BtnRotate";
+            this.BtnRotate.Size = new System.Drawing.Size(96, 23);
+            this.BtnRotate.TabIndex = 24;
+            this.BtnRotate.Text = "旋转";
+            this.BtnRotate.UseVisualStyleBackColor = true;
+            this.BtnRotate.Click += new System.EventHandler(this.BtnRotate_Click);
+            // 
+            // BtnSplice
+            // 
+            this.BtnSplice.Location = new System.Drawing.Point(399, 20);
+            this.BtnSplice.Name = "BtnSplice";
+            this.BtnSplice.Size = new System.Drawing.Size(75, 23);
+            this.BtnSplice.TabIndex = 20;
+            this.BtnSplice.Text = "拼接图片";
+            this.BtnSplice.UseVisualStyleBackColor = true;
+            this.BtnSplice.Click += new System.EventHandler(this.BtnSplice_Click);
             // 
             // BtnAmphilinearity
             // 
@@ -775,15 +883,15 @@
             this.BtnZoomNN.UseVisualStyleBackColor = true;
             this.BtnZoomNN.Click += new System.EventHandler(this.BtnZoomNN_Click);
             // 
-            // ZhangExpendThinning
+            // BtnShewCorrection
             // 
-            this.ZhangExpendThinning.Location = new System.Drawing.Point(9, 43);
-            this.ZhangExpendThinning.Name = "ZhangExpendThinning";
-            this.ZhangExpendThinning.Size = new System.Drawing.Size(96, 23);
-            this.ZhangExpendThinning.TabIndex = 23;
-            this.ZhangExpendThinning.Text = "Zhang扩展细化";
-            this.ZhangExpendThinning.UseVisualStyleBackColor = true;
-            this.ZhangExpendThinning.Click += new System.EventHandler(this.ZhangExpendThinning_Click);
+            this.BtnShewCorrection.Location = new System.Drawing.Point(102, 49);
+            this.BtnShewCorrection.Name = "BtnShewCorrection";
+            this.BtnShewCorrection.Size = new System.Drawing.Size(96, 23);
+            this.BtnShewCorrection.TabIndex = 22;
+            this.BtnShewCorrection.Text = "倾斜矫正";
+            this.BtnShewCorrection.UseVisualStyleBackColor = true;
+            this.BtnShewCorrection.Click += new System.EventHandler(this.BtnShewCorrection_Click);
             // 
             // FrmMain
             // 
@@ -887,6 +995,15 @@
         private System.Windows.Forms.Button BtnAmphilinearity;
         private System.Windows.Forms.Button BtnZhangThinning;
         private System.Windows.Forms.Button ZhangExpendThinning;
+        private System.Windows.Forms.Button BtnGabor;
+        private System.Windows.Forms.Button BtnSplice;
+        private System.Windows.Forms.Button BtnkFill;
+        private System.Windows.Forms.Button BtnDensity;
+        private System.Windows.Forms.Button BtnBoxImage;
+        private System.Windows.Forms.Button BtnRotate;
+        private System.Windows.Forms.Button BtnFillBreakpoint;
+        private System.Windows.Forms.Button BtnNoiseKiller;
+        private System.Windows.Forms.Button BtnShewCorrection;
     }
 }
 

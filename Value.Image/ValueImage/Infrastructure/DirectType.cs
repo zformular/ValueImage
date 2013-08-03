@@ -2,6 +2,9 @@
 
 namespace ValueImage.Infrastructure
 {
+    /// <summary>
+    ///  方向
+    /// </summary>
     public enum DirectType
     {
         /// <summary>

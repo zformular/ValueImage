@@ -4,6 +4,9 @@ using ValueImage.Infrastructure;
 
 namespace ValueImage.Interface
 {
+    /// <summary>
+    ///  图形灰度处理结果
+    /// </summary>
     public interface IGray
     {
         /// <summary>

@@ -3,14 +3,14 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using ValueMathHelper;
+using MathHelper;
 using ValueImage.Infrastructure;
 
 namespace ValueImage.ImageFactory.Base
 {
-    abstract partial class ImageBase : IDisposable
+    abstract partial class ImageBase
     {
-        protected ValueMath mathHelper = ValueMath.GetInstance();
+        protected ValueMath valueMath = ValueMath.GetInstance();
 
         #region 内存法处理图像
 
@@ -32,7 +32,6 @@ namespace ValueImage.ImageFactory.Base
 
         protected virtual Byte[] LockBits(Bitmap srcImage, ImageLockMode mode)
         {
-
             sourceImage = srcImage;
 
             Int32 tempWidth = sourceImage.Width;
@@ -65,13 +64,26 @@ namespace ValueImage.ImageFactory.Base
 
         protected void UnlockBits(Byte[] rgbData)
         {
-            Marshal.Copy(rgbData, 0, ptr, rgbData.Length);
-            sourceImage.UnlockBits(bmpData);
+            try
+            {
+                Marshal.Copy(rgbData, 0, ptr, rgbData.Length);
+                sourceImage.UnlockBits(bmpData);
+                sourceImage = null;
+                bmpData = null;
+                ptr = IntPtr.Zero;
+            }
+            catch
+            {
+
+            }
         }
 
         protected void UnlockBits()
         {
             sourceImage.UnlockBits(bmpData);
+            sourceImage = null;
+            bmpData = null;
+            ptr = IntPtr.Zero;
         }
 
         #endregion
@@ -360,10 +372,150 @@ namespace ValueImage.ImageFactory.Base
             Int32 row = index / width;
             Int32 col = index % width;
             Int32[] set = new Int32[9];
+            Int32 rm1 = (row - 1) >= 0 ? (row - 1) : row;
+            Int32 rp1 = (row + 1) < height ? (row + 1) : row;
+            Int32 cm1 = (col - 1) >= 0 ? (col - 1) : col;
+            Int32 cp1 = (col + 1) < width ? (col + 1) : col;
+
             switch (type)
             {
                 case DirectType.Clock:
                     set[0] = index;
+                    set[1] = rm1 * width + col;
+                    set[2] = rm1 * width + cp1;
+                    set[3] = row * width + cp1;
+                    set[4] = rp1 * width + cp1;
+                    set[5] = rp1 * width + col;
+                    set[6] = rp1 * width + cm1;
+                    set[7] = row * width + cm1;
+                    set[8] = rm1 * width + cm1;
+                    break;
+                case DirectType.UntiClock:
+                    set[0] = index;
+                    set[1] = rm1 * width + col;
+                    set[2] = rm1 * width + cm1;
+                    set[3] = row * width + cm1;
+                    set[4] = rp1 * width + cm1;
+                    set[5] = rp1 * width + col;
+                    set[6] = rp1 * width + cp1;
+                    set[7] = row * width + cp1;
+                    set[8] = rm1 * width + cp1;
+                    break;
+            }
+            return set;
+        }
+
+        /// <summary>
+        ///  获得3x3索引 当前元素为正中心 只获取存在的邻域索引
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected Int32[] getExistFilterWindow3x3(Int32 index, Int32 width, Int32 height, DirectType type)
+        {
+            System.Collections.Generic.List<Int32> list = new System.Collections.Generic.List<int>();
+            Int32 row = index / width;
+            Int32 col = index % width;
+            list.Add(index);
+            switch (type)
+            {
+                case DirectType.Clock:
+                    if (row > 0)
+                        list.Add((row - 1) * width + col);
+                    if (row > 0 && col < width - 1)
+                        list.Add((row - 1) * width + col + 1);
+                    if (col < width - 1)
+                        list.Add(row * width + col + 1);
+                    if (row < height - 1 && col < width - 1)
+                        list.Add((row + 1) * width + col + 1);
+                    if (row < height - 1)
+                        list.Add((row + 1) * width + col);
+                    if (row < height - 1 && col > 0)
+                        list.Add((row + 1) * width + col - 1);
+                    if (col > 0)
+                        list.Add(row * width + col - 1);
+                    if (row > 0 && col > 0)
+                        list.Add((row - 1) * width + col - 1);
+                    break;
+                case DirectType.UntiClock:
+                    if (row > 0)
+                        list.Add((row - 1) * width + col);
+                    if (row > 0 && col > 0)
+                        list.Add((row - 1) * width + col - 1);
+                    if (col > 0)
+                        list.Add(row * width + col - 1);
+                    if (row < height - 1 && col > 0)
+                        list.Add((row + 1) * width + col - 1);
+                    if (row < height - 1)
+                        list.Add((row + 1) * width + col);
+                    if (row < height - 1 && col < width - 1)
+                        list.Add((row + 1) * width + col + 1);
+                    if (col < width - 1)
+                        list.Add(row * width + col + 1);
+                    if (row > 0 && col < width)
+                        list.Add((row - 1) * width + col + 1);
+                    break;
+            }
+            return list.ToArray();
+        }
+
+        /// <summary>
+        ///  获取3x3窗体
+        ///  统一正上方为突入外围点(即当前点索引为0, 正上方点索引为1)
+        /// </summary>
+        /// <param name="data">二维数据</param>
+        /// <param name="x">当前点横坐标</param>
+        /// <param name="y">当前点纵坐标</param>
+        /// <param name="width">数据宽度</param>
+        /// <param name="height">数据高度</param>
+        /// <param name="overstepColor">超出边界的点的填充值</param>
+        /// <param name="type">窗口索引的方向</param>
+        protected Byte[] getFilterWindow3x3(ref Byte[] data, Int32 x, Int32 y, Int32 width, Int32 height, Byte overstepColor, DirectType type)
+        {
+            Byte[] set = new Byte[9];
+            Int32 index = y * width + x;
+            switch (type)
+            {
+                case DirectType.Clock:
+                    set[0] = data[index];
+                    set[1] = (y > 0) ? data[(y - 1) * width + x] : overstepColor;
+                    set[2] = (y > 0) ? ((x < (width - 1)) ? data[(y - 1) * width + x + 1] : overstepColor) : overstepColor;
+                    set[3] = (x < (width - 1)) ? data[y * width + x + 1] : overstepColor;
+                    set[4] = (y < (height - 1) ? (x < (width - 1) ? data[(y + 1) * width + x + 1] : overstepColor) : overstepColor);
+                    set[5] = (y < (height - 1)) ? data[(y + 1) * width + x] : overstepColor;
+                    set[6] = (y < (height - 1)) ? ((x > 0) ? data[(y + 1) * width + x - 1] : overstepColor) : overstepColor;
+                    set[7] = (x > 0) ? data[y * width + x - 1] : overstepColor;
+                    set[8] = (y > 0) ? ((x > 0) ? data[(y - 1) * width + x - 1] : overstepColor) : overstepColor;
+                    break;
+                case DirectType.UntiClock:
+                    set[0] = data[index];
+                    set[1] = (y > 0) ? data[(y - 1) * width + x] : overstepColor;
+                    set[2] = (y > 0) ? ((x > 0) ? data[(y - 1) * width + x - 1] : overstepColor) : overstepColor;
+                    set[3] = (x > 0) ? data[y * width + x - 1] : overstepColor;
+                    set[4] = (y < (height - 1)) ? ((x > 0) ? data[(y + 1) * width + x - 1] : overstepColor) : overstepColor;
+                    set[5] = (y < (height - 1)) ? data[(y + 1) * width + x] : overstepColor;
+                    set[6] = (y < (height - 1) ? (x < (width - 1) ? data[(y + 1) * width + x + 1] : overstepColor) : overstepColor);
+                    set[7] = (x < (width - 1)) ? data[y * width + x + 1] : overstepColor;
+                    set[8] = (y > 0) ? ((x < (width - 1)) ? data[(y - 1) * width + x + 1] : overstepColor) : overstepColor;
+                    break;
+            }
+
+            return set;
+        }
+
+        protected Int32[] getFilterWindow5x5(Int32 index, Int32 width, Int32 height, DirectType type)
+        {
+            Int32 row = index / width;
+            Int32 col = index % width;
+            Int32[] set = new Int32[25];
+            switch (type)
+            {
+                case DirectType.Clock:
+                    set[0] = index;
+                    #region 内圈
+
                     set[1] = System.Math.Abs(row - 1) % height * width + col;
                     set[2] = System.Math.Abs(row - 1) % height * width + (col + 1) % width;
                     set[3] = row * width + (col + 1) % width;
@@ -372,9 +524,33 @@ namespace ValueImage.ImageFactory.Base
                     set[6] = (row + 1) % height * width + System.Math.Abs(col - 1) % width;
                     set[7] = row * width + System.Math.Abs(col - 1) % width;
                     set[8] = System.Math.Abs(row - 1) % height * width + System.Math.Abs(col - 1) % width;
+
+                    #endregion
+                    #region 外圈
+
+                    set[9] = System.Math.Abs(row - 2) % height * width + col;
+                    set[10] = System.Math.Abs(row - 2) % height * width + (col + 1) % width;
+                    set[11] = System.Math.Abs(row - 2) % height * width + (col + 2) % width;
+                    set[12] = System.Math.Abs(row - 1) % height * width + (col + 2) % width;
+                    set[13] = row * width + (col + 2) % width;
+                    set[14] = (row + 1) % height * width + (col + 2) % width;
+                    set[15] = (row + 2) % height * width + (col + 2) % width;
+                    set[16] = (row + 2) % height * width + (col + 1) % width;
+                    set[17] = (row + 2) % height * width + col;
+                    set[18] = (row + 2) % height * width + System.Math.Abs(col - 1) % width;
+                    set[19] = (row + 2) % height * width + System.Math.Abs(col - 2) % width;
+                    set[20] = (row + 1) % height * width + System.Math.Abs(col - 2) % width;
+                    set[21] = row * width + System.Math.Abs(col - 2) % width;
+                    set[22] = System.Math.Abs(row - 1) % height * width + System.Math.Abs(col - 2) % width;
+                    set[23] = System.Math.Abs(row - 2) % height * width + System.Math.Abs(col - 2) % width;
+                    set[24] = System.Math.Abs(row - 2) % height * width + System.Math.Abs(col - 1) % width;
+
+                    #endregion
                     break;
                 case DirectType.UntiClock:
                     set[0] = index;
+                    #region 圈内
+
                     set[1] = System.Math.Abs(row - 1) % height * width + col;
                     set[2] = System.Math.Abs(row - 1) % height * width + System.Math.Abs(col - 1) % width;
                     set[3] = row * width + System.Math.Abs(col - 1) % width;
@@ -383,34 +559,31 @@ namespace ValueImage.ImageFactory.Base
                     set[6] = (row + 1) % height * width + (col + 1) % width;
                     set[7] = row * width + (col + 1) % width;
                     set[8] = System.Math.Abs(row - 1) % height * width + (col + 1) % width;
+
+                    #endregion
+                    #region 圈外
+
+                    set[9] = System.Math.Abs(row - 2) % height * width + col;
+                    set[10] = System.Math.Abs(row - 2) % height * width + System.Math.Abs(col - 1) % width;
+                    set[11] = System.Math.Abs(row - 2) % height * width + System.Math.Abs(col - 2) % width;
+                    set[12] = System.Math.Abs(row - 1) % height * width + System.Math.Abs(col - 2) % width;
+                    set[13] = row * width + System.Math.Abs(col - 2) % width;
+                    set[14] = (row + 1) % height * width + System.Math.Abs(col - 2) % width;
+                    set[15] = (row + 2) % height * width + System.Math.Abs(col - 2) % width;
+                    set[16] = (row + 2) % height * width + System.Math.Abs(col - 1) % width;
+                    set[17] = (row + 2) % height * width + col;
+                    set[18] = (row + 2) % height * width + (col + 1) % width;
+                    set[19] = (row + 2) % height * width + (col + 2) % width;
+                    set[20] = (row + 1) % height * width + (col + 2) % width;
+                    set[21] = row * width + (col + 2) % width;
+                    set[22] = System.Math.Abs(row - 1) % height * width + (col + 2) % width;
+                    set[23] = System.Math.Abs(row - 2) % height * width + (col + 2) % width;
+                    set[24] = System.Math.Abs(row - 2) % height * width + (col + 1) % width;
+
+                    #endregion
                     break;
             }
             return set;
-        }
-
-        #endregion
-
-        #region IDisposable 成员
-
-        private Boolean disposed = false;
-        private void Dispose(Boolean disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    bmpData = null;
-                    sourceImage.Dispose();
-                    ptr = IntPtr.Zero;
-
-                }
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         #endregion

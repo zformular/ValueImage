@@ -38,13 +38,13 @@ namespace ValueImage.ImageFactory.Bit24
                     switch (type)
                     {
                         case GrayscaleType.Maximum:
-                            temp = mathHelper.Max(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempr[i * singleWidth + j]);
+                            temp =  MathHelper.ValueMath.Max(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempr[i * singleWidth + j]);
                             break;
                         case GrayscaleType.Minimal:
-                            temp = mathHelper.Min(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempg[i * singleWidth + j]);
+                            temp =  MathHelper.ValueMath.Min(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempg[i * singleWidth + j]);
                             break;
                         case GrayscaleType.Average:
-                            temp = mathHelper.Average(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempg[i * singleWidth + j]);
+                            temp = MathHelper.ValueMath.Average(tempb[i * singleWidth + j], tempg[i * singleWidth + j], tempg[i * singleWidth + j]);
                             break;
                     }
 
@@ -218,14 +218,10 @@ namespace ValueImage.ImageFactory.Bit24
                 for (int j = 0; j < singleWidth; j++)
                 {
                     tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
-                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
-                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
                 }
             }
-            Byte[] resub, resug, resur;
+            Byte[] resub;
             base.optimalThreshold(ref tempb, singleWidth, Height, out resub);
-            base.optimalThreshold(ref tempg, singleWidth, Height, out resug);
-            base.optimalThreshold(ref tempr, singleWidth, Height, out resur);
 
             for (int i = 0; i < Height; i++)
             {

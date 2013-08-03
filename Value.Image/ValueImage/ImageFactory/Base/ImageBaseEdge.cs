@@ -236,7 +236,7 @@ namespace ValueImage.ImageFactory.Base
                     grad[4] += data[set[j]] * OperatorSet.kirschOperator5[j];
                     grad[5] += data[set[j]] * OperatorSet.kirschOperator6[j];
                 }
-                tempArray[i] = mathHelper.Max(grad);
+                tempArray[i] =  MathHelper.ValueMath.Max(grad);
             }
 
             // 判断是否进行二值化

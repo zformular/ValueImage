@@ -50,9 +50,36 @@ namespace ValueImage.Interface
         void Zoom(Bitmap srcImage, Double zoomingX, Double zoomingY, ZoomType type);
 
         /// <summary>
+        ///  双线性插值缩放
+        /// </summary>
+        /// <param name="srcImage"></param>
+        /// <param name="zoomingX"></param>
+        /// <param name="zoomingY"></param>
+        /// <returns></returns>
+        Bitmap BileanerZoom(Bitmap srcImage, Int32 width, Int32 height);
+
+        /// <summary>
         ///  旋转
         /// </summary>
         /// <param name="degree">角度</param>
-        void Gyrate(Bitmap srcImage, Int32 degree);
+        void Rotate(Bitmap srcImage, Int32 degree);
+
+        /// <summary>
+        ///  双线性插值法
+        /// </summary>
+        Bitmap BileanerRotate(Bitmap srcImage, Double angle);
+
+        /// <summary>
+        ///  双线性插值法
+        /// </summary>
+        /// <param name="backColor">背景颜色</param>
+        Bitmap BileanerRotate(Bitmap srcImage, Double angle, Color backColor);
+
+        /// <summary>
+        ///  拼接图片
+        /// </summary>
+        /// <param name="infos"></param>
+        /// <returns></returns>
+        Bitmap SpliceImage(ImageInfo[] infos);
     }
 }

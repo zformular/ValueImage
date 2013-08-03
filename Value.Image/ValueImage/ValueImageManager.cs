@@ -6,11 +6,18 @@ using System.Diagnostics;
 
 namespace ValueImage
 {
+    /// <summary>
+    ///  ValueImage管理者
+    /// </summary>
     public class ValueImageManager
     {
+        /// <summary>
+        ///  获得ValueImage实例
+        /// </summary>
+        /// <param name="format">图像像素类型</param>
         public static IValueImage GetValueImage(PixelFormat format)
         {
-            ValueMathHelper.ValueMath helper = ValueMathHelper.ValueMath.GetInstance();
+            MathHelper.ValueMath helper = MathHelper.ValueMath.GetInstance();
 
             switch (format)
             {

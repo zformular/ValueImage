@@ -21,7 +21,7 @@ namespace ValueImage.Interface
         /// <summary>
         ///  均匀量化
         /// </summary>
-        /// <param name="prototyleColor">原型色</param>
+        /// <param name="prototypeColor">原型色</param>
         void UniformQuantization(Bitmap srcImage, ColorBytes[] prototypeColor);
 
         /// <summary>

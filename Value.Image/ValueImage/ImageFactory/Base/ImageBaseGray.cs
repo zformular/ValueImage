@@ -28,8 +28,8 @@ namespace ValueImage.ImageFactory.Base
         {
             Int32[] freq;
             this.frequency(ref data, out freq);
-            Int32 maxIndex = mathHelper.MaxIndex(freq);
-            Int32 minIndex = mathHelper.MinIndex(freq);
+            Int32 maxIndex =  MathHelper.ValueMath.MaxIndex(freq);
+            Int32 minIndex =  MathHelper.ValueMath.MinIndex(freq);
             float p = 255.0F / (maxIndex - minIndex);
             Int32 temp = 0;
             for (int i = 0; i < data.Length; i++)

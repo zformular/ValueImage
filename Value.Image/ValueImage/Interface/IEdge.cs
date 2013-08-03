@@ -37,6 +37,7 @@ namespace ValueImage.Interface
         ///  拉普拉斯算子
         /// </summary>
         /// <param name="thresholding">阈值(为零的话不进行二值化)</param>
+        /// <param name="number">拉普拉斯算子序号</param>
         void LaplacianEgde(Bitmap srcImage, Int32 thresholding, Int32 number);
 
         /// <summary>

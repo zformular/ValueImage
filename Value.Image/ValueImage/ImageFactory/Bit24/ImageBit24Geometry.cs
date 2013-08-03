@@ -2,6 +2,7 @@
 using ValueImage.Interface;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace ValueImage.ImageFactory.Bit24
 {
@@ -11,7 +12,6 @@ namespace ValueImage.ImageFactory.Bit24
 
         public void FillRectangle(System.Drawing.Bitmap srcImage, int startRow, int startCol, int endRow, int endCol, System.Drawing.Color color)
         {
-            Debug.Assert(endCol > startCol && endRow > startRow, "终止坐标必须大于起始坐标");
             if (endCol < startCol || endRow < startRow) return;
 
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
@@ -215,83 +215,136 @@ namespace ValueImage.ImageFactory.Bit24
             UnlockBits(rgbBytes);
         }
 
-        /// <summary>
-        ///  失败的作品
-        ///  用算法旋转会出现噪声
-        ///  双线性插值法
-        /// </summary>
-        public void Gyrate(System.Drawing.Bitmap srcImage, int degree)
+        public void Rotate(System.Drawing.Bitmap srcImage, int degree)
         {
-            Byte[] rgbBytes = LockBits(srcImage, ImageLockMode.ReadWrite);
-            Double radian = degree * System.Math.PI / 180.0;
-            Double sin = System.Math.Sin(radian);
-            Double cos = System.Math.Cos(radian);
+            //Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            //Int32 singleWidth = RealWidth / 3;
+            //Int32 length = singleWidth * Height;
+            //Byte[] tempb = new Byte[length];
+            //Byte[] tempg = new Byte[length];
+            //Byte[] tempr = new Byte[length];
+            //for (int i = 0; i < Height; i++)
+            //{
+            //    for (int j = 0; j < singleWidth; j++)
+            //    {
+            //        tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+            //        tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+            //        tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
+            //    }
+            //}
+            //Byte[] resub, resug, resur;
+            //base.amphilinearityRotate(ref tempb, singleWidth, Height, degree, out resub);
+            //base.amphilinearityRotate(ref tempg, singleWidth, Height, degree, out resug);
+            //base.amphilinearityRotate(ref tempr, singleWidth, Height, degree, out resur);
 
-            Byte[] tempArray = new Byte[Length];
-            for (int i = 0; i < Length; i++)
+            //for (int i = 0; i < Height; i++)
+            //{
+            //    for (int j = 0; j < singleWidth; j++)
+            //    {
+            //        rgbBytes[i * Width + j * 3] = resub[i * singleWidth + j];
+            //        rgbBytes[i * Width + j * 3 + 1] = resug[i * singleWidth + j];
+            //        rgbBytes[i * Width + j * 3 + 2] = resur[i * singleWidth + j];
+            //    }
+            //}
+            //UnlockBits(rgbBytes);
+
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            Byte[] tempg = new Byte[length];
+            Byte[] tempr = new Byte[length];
+            for (int i = 0; i < Height; i++)
             {
-                tempArray[i] = 255;
-            }
-
-            Int32 xz = 0, yz = 0;
-            Int32 tempWidth = 0, tempHeight = 0;
-            Double tempX, tempY, p, q;
-
-            for (int i = 0; i < Length; i += 3)
-            {
-                if (i % RealWidth >= RealWidth)
+                for (int j = 0; j < singleWidth; j++)
                 {
-                    i = (i / Width + 1) * Width - 3;
-                    continue;
-                }
-
-                Int32 row = i / Width;
-                Int32 col = i % Width;
-
-                tempHeight = row - HalfHeight;
-                tempWidth = (col - HalfWidth) / 3;
-
-                // 以图像的几何中心为坐标原点进行坐标变换
-                // 按逆向映射法得到输入图像的坐标
-                tempX = tempWidth * cos - tempHeight * sin;
-                tempY = tempWidth * sin + tempHeight * cos;
-
-                xz = tempWidth > 0 ? ((Int32)tempX) : ((Int32)(tempX - 1));
-                yz = tempHeight > 0 ? ((Int32)tempY) : ((Int32)(tempY - 1));
-
-                // 公式需要用到
-                p = tempX - xz;
-                q = tempY - yz;
-
-                tempWidth = xz * 3 + HalfWidth;
-                tempHeight = yz + HalfHeight;
-
-                if (tempWidth < 0 || (tempWidth + 1) >= Width || tempHeight < 0 || (tempHeight + 1) >= Height)
-                {
-                    tempArray[i] = 255;
-                    tempArray[i + 1] = 255;
-                    tempArray[i + 2] = 255;
-                }
-                else
-                {
-                    tempArray[i] = (Byte)((1.0F - p) * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth] +
-                        (1.0F - p) * q * rgbBytes[(tempHeight + 1) * Width + tempWidth] +
-                        p * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth + 3] +
-                        p * q * rgbBytes[(tempHeight + 1) * Width + tempWidth + 3]);
-
-                    tempArray[i + 1] = (Byte)((1.0F - p) * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth + 1] +
-                       (1.0F - p) * q * rgbBytes[(tempHeight + 1) * Width + tempWidth + 1] +
-                       p * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth + 4] +
-                       p * q * rgbBytes[(tempHeight + 1) * Width + tempWidth + 4]);
-
-                    tempArray[i + 2] = (Byte)((1.0F - p) * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth + 2] +
-                      (1.0F - p) * q * rgbBytes[(tempHeight + 1) * Width + tempWidth + 2] +
-                      p * (1.0F - q) * rgbBytes[tempHeight * Width + tempWidth + 5] +
-                      p * q * rgbBytes[(tempHeight + 1) * Width + tempWidth + 5]);
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
                 }
             }
-            rgbBytes = (Byte[])tempArray.Clone();
             UnlockBits(rgbBytes);
+
+            Double sin = System.Math.Sin(degree);
+            Double cos = System.Math.Cos(degree);
+
+            Int32 medianX = singleWidth / 2;
+            Int32 medianY = Height / 2;
+
+            Int32 growX = (Int32)System.Math.Abs(System.Math.Ceiling(medianX * cos - medianY * sin) - medianX);
+            Int32 growY = (Int32)System.Math.Ceiling(medianX * sin + medianY * cos);
+
+            Int32 newWidth = singleWidth + growX * 2;
+            Int32 newHeight = Height + growY * 2;
+            Byte[] resub, resug, resur;
+            base.bilinearRotate(ref tempb, singleWidth, Height, degree, newWidth, newHeight, out resub);
+            base.bilinearRotate(ref tempg, singleWidth, Height, degree, newWidth, newHeight, out resug);
+            base.bilinearRotate(ref tempr, singleWidth, Height, degree, newWidth, newHeight, out resur);
+
+            System.Drawing.Bitmap rstImage;
+            this.createImage(ref resub, ref resug, ref resur, newWidth, newHeight, srcImage.PixelFormat, out rstImage);
+            rstImage.Save("D:\\test.jpg");
+        }
+
+        public System.Drawing.Bitmap BileanerRotate(System.Drawing.Bitmap srcImage, double angle)
+        {
+            return this.BileanerRotate(srcImage, angle, Color.White);
+        }
+
+        public System.Drawing.Bitmap BileanerRotate(System.Drawing.Bitmap srcImage, double angle, System.Drawing.Color backColor)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            Byte[] tempg = new Byte[length];
+            Byte[] tempr = new Byte[length];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
+                }
+            }
+            UnlockBits(rgbBytes);
+
+            angle = (360 - angle % 360) % 360;
+            Double degree = System.Math.PI / 180 * angle;
+
+            Double sin = System.Math.Sin(degree);
+            Double cos = System.Math.Cos(degree);
+            Int32 medianX = (singleWidth + 1) / 2;
+            Int32 medianY = (Height + 1) / 2;
+
+
+            Int32[] setX = new Int32[] { 0, singleWidth };
+            Int32[] setY = new Int32[] { 0, Height };
+            Int32 xx = 0, yy = 0, tempX, tempY;
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    tempX = System.Math.Abs((Int32)System.Math.Ceiling((setX[i] - medianX) * cos - (setY[j] - medianY) * sin + medianX));
+                    tempY = System.Math.Abs((Int32)System.Math.Ceiling((setX[i] - medianX) * sin + (setY[j] - medianY) * cos + medianY));
+
+                    xx = xx < tempX ? tempX : xx;
+                    yy = yy < tempY ? tempY : yy;
+                }
+            }
+
+            Int32 width = System.Math.Abs(xx - singleWidth) * 2 + singleWidth;
+            Int32 height = System.Math.Abs(yy - Height) * 2 + Height;
+
+            Byte[] resub, resug, resur;
+            bilinearRotate(ref tempb, singleWidth, Height, degree, width, height, backColor.B, out resub);
+            bilinearRotate(ref tempg, singleWidth, Height, degree, width, height, backColor.G, out resug);
+            bilinearRotate(ref tempr, singleWidth, Height, degree, width, height, backColor.R, out resur);
+
+            System.Drawing.Bitmap result;
+            this.createImage(ref resub, ref resug, ref resur, width, height, srcImage.PixelFormat, out result);
+            return result;
         }
 
         public void Zoom(System.Drawing.Bitmap srcImage, Double zoomingX, Double zoomingY, Infrastructure.ZoomType type)
@@ -335,6 +388,93 @@ namespace ValueImage.ImageFactory.Bit24
                 }
             }
             UnlockBits(rgbBytes);
+        }
+
+        public System.Drawing.Bitmap BileanerZoom(System.Drawing.Bitmap srcImage, int width, int height)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            Byte[] tempg = new Byte[length];
+            Byte[] tempr = new Byte[length];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
+                }
+            }
+            UnlockBits(rgbBytes);
+
+            Byte[] resub, resug, resur;
+            bileanerZoom(ref tempb, singleWidth, Height, width, height, out resub);
+            bileanerZoom(ref tempg, singleWidth, Height, width, height, out resug);
+            bileanerZoom(ref tempr, singleWidth, Height, width, height, out resur);
+
+            System.Drawing.Bitmap result;
+            this.createImage(ref resub, ref resug, ref resur, width, height, srcImage.PixelFormat, out result);
+            return result;
+        }
+
+        public System.Drawing.Bitmap SpliceImage(Infrastructure.ImageInfo[] infos)
+        {
+            Int32 width = 0, height = 0, temp;
+            for (int i = 0; i < infos.Length; i++)
+            {
+                temp = infos[i].Location.X + infos[i].Size.Width;
+                if (temp > width)
+                    width = temp;
+
+                temp = infos[i].Location.Y + infos[i].Size.Height;
+                if (temp > height)
+                    height = temp;
+            }
+
+            System.Drawing.Bitmap orgImage = new System.Drawing.Bitmap(width, height, PixelFormat.Format24bppRgb);
+            Byte[] rgbBytes = LockBits(orgImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            Byte[] tempg = new Byte[length];
+            Byte[] tempr = new Byte[length];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+
+                    rgbBytes[i * Width + j * 3] = Byte.MaxValue;
+                    rgbBytes[i * Width + j * 3 + 1] = Byte.MaxValue;
+                    rgbBytes[i * Width + j * 3 + 2] = Byte.MaxValue;
+
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
+                }
+            }
+            UnlockBits(rgbBytes);
+
+            for (int i = 0; i < infos.Length; i++)
+            {
+                base.spliceImage(singleWidth, ref tempb, ref tempg, ref tempr, ref infos[i]);
+            }
+
+            rgbBytes = LockBits(orgImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            singleWidth = RealWidth / 3;
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    rgbBytes[i * Width + j * 3] = tempb[i * singleWidth + j];
+                    rgbBytes[i * Width + j * 3 + 1] = tempg[i * singleWidth + j];
+                    rgbBytes[i * Width + j * 3 + 2] = tempr[i * singleWidth + j];
+                }
+            }
+            UnlockBits(rgbBytes);
+
+            return orgImage;
         }
 
         #endregion

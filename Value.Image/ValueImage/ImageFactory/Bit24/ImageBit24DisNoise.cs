@@ -196,6 +196,39 @@ namespace ValueImage.ImageFactory.Bit24
             this.GrayOpen(srcImage, template);
         }
 
+        public void kFillFilter(System.Drawing.Bitmap srcImage)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            Byte[] tempg = new Byte[length];
+            Byte[] tempr = new Byte[length];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                    tempg[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 1];
+                    tempr[i * singleWidth + j] = rgbBytes[i * Width + j * 3 + 2];
+                }
+            }
+            base.kfillFilter(ref tempb, singleWidth, Height);
+            base.kfillFilter(ref tempg, singleWidth, Height);
+            base.kfillFilter(ref tempr, singleWidth, Height);
+
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    rgbBytes[i * Width + j * 3] = tempb[i * singleWidth + j];
+                    rgbBytes[i * Width + j * 3 + 1] = tempg[i * singleWidth + j];
+                    rgbBytes[i * Width + j * 3 + 2] = tempr[i * singleWidth + j];
+                }
+            }
+            UnlockBits(rgbBytes);
+        }
+
         #endregion
     }
 }

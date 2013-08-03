@@ -12,6 +12,7 @@ namespace ValueImage.Interface
         /// <summary>
         ///  成分滤波
         /// </summary>
+        /// <param name="type">滤波类型</param>
         void ComponentFilter(Bitmap srcImage, RateFilterType type);
 
         /// <summary>
@@ -78,6 +79,7 @@ namespace ValueImage.Interface
         ///  统计方法滤波
         /// </summary>
         /// <param name="thresholding">阀值</param>
+        /// <param name="type">滤波窗口大小</param>
         void StatisticFilter(Bitmap srcImage, TemplateType type, Double thresholding);
     }
 }

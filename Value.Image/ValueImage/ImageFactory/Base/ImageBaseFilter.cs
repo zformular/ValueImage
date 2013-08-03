@@ -1,7 +1,7 @@
 ﻿using System;
-using ValueMathHelper.Infrastructure;
-using ValueImage.Infrastructure;
 using System.Diagnostics;
+using ValueImage.Infrastructure;
+using MathHelper.Infrastructure;
 
 namespace ValueImage.ImageFactory.Base
 {
@@ -21,8 +21,8 @@ namespace ValueImage.ImageFactory.Base
         /// <returns></returns>
         public Complex[] FFT2(Byte[] rgbBytes, Int32 width, Int32 realWidth, Int32 height, Boolean inv)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) return null;
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) return null;
 
             Int32 length = width * height;
             Byte[] tempBytes = (Byte[])rgbBytes.Clone();
@@ -74,9 +74,9 @@ namespace ValueImage.ImageFactory.Base
                     tempCompHg[j] = tempComp[i * width + j * 3 + 1];
                     tempCompHr[j] = tempComp[i * width + j * 3 + 2];
                 }
-                tempCompHr = mathHelper.FFT(tempCompHr, singleLength);
-                tempCompHg = mathHelper.FFT(tempCompHg, singleLength);
-                tempCompHb = mathHelper.FFT(tempCompHb, singleLength);
+                tempCompHr = valueMath.FFT(tempCompHr, singleLength);
+                tempCompHg = valueMath.FFT(tempCompHg, singleLength);
+                tempCompHb = valueMath.FFT(tempCompHb, singleLength);
 
                 for (int j = 0; j < singleLength; j++)
                 {
@@ -94,7 +94,7 @@ namespace ValueImage.ImageFactory.Base
                 {
                     tempCompVe[j] = tempComp[j * width + i];
                 }
-                tempCompVe = mathHelper.FFT(tempCompVe, height);
+                tempCompVe = valueMath.FFT(tempCompVe, height);
 
                 for (int j = 0; j < height; j++)
                 {
@@ -116,8 +116,8 @@ namespace ValueImage.ImageFactory.Base
         /// <returns></returns>
         public Byte[] IFFT2(Complex[] freData, Int32 width, Int32 realWidth, Int32 height, Boolean inv)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) return null;
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) return null;
 
             Int32 length = width * height;
             Complex[] tempComp = (Complex[])freData.Clone();
@@ -135,9 +135,9 @@ namespace ValueImage.ImageFactory.Base
                     tempCompHg[j] = tempComp[i * width + j * 3 + 1];
                     tempCompHr[j] = tempComp[i * width + j * 3 + 2];
                 }
-                tempCompHr = mathHelper.IFFT(tempCompHr, singleLength);
-                tempCompHg = mathHelper.IFFT(tempCompHg, singleLength);
-                tempCompHb = mathHelper.IFFT(tempCompHb, singleLength);
+                tempCompHr = valueMath.IFFT(tempCompHr, singleLength);
+                tempCompHg = valueMath.IFFT(tempCompHg, singleLength);
+                tempCompHb = valueMath.IFFT(tempCompHb, singleLength);
 
                 for (int j = 0; j < singleLength; j++)
                 {
@@ -155,7 +155,7 @@ namespace ValueImage.ImageFactory.Base
                 {
                     tempCompVe[j] = tempComp[j * width + i];
                 }
-                tempCompVe = mathHelper.IFFT(tempCompVe, height);
+                tempCompVe = valueMath.IFFT(tempCompVe, height);
                 for (int j = 0; j < height; j++)
                 {
                     tempComp[j * width + i] = tempCompVe[j];
@@ -211,8 +211,8 @@ namespace ValueImage.ImageFactory.Base
         /// <param name="radius">滤波圆周边界(大于该边界都不可通过)</param>
         protected void lowpassFilter(ref Byte[] data, Int32 width, Int32 height, Double radius, out Byte[] result)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
 
             Complex[] tempComp;
             this.FFT(ref data, width, height, true, out tempComp);
@@ -244,8 +244,8 @@ namespace ValueImage.ImageFactory.Base
         /// <param name="radius">滤波边界(小于该边界都不可通过)</param>
         protected void highpassFilter(ref Byte[] data, Int32 width, Int32 height, Double radius, out Byte[] result)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
 
             Complex[] tempComp;
             this.FFT(ref data, width, height, true, out tempComp);
@@ -278,8 +278,8 @@ namespace ValueImage.ImageFactory.Base
         /// <param name="outerRadius">滤波圆周外边界</param>
         protected void bandstopFilter(ref Byte[] data, Int32 width, Int32 height, Double innerRadius, Double outerRadius, out Byte[] result)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
 
             Complex[] tempComp;
             this.FFT(ref data, width, height, true, out tempComp);
@@ -313,8 +313,8 @@ namespace ValueImage.ImageFactory.Base
         /// <param name="result"></param>
         protected void bandpassFilter(ref Byte[] data, Int32 width, Int32 height, Double innerRadius, Double outerRadius, out Byte[] result)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
 
             Complex[] tempComp;
             this.FFT(ref data, width, height, true, out tempComp);
@@ -347,8 +347,8 @@ namespace ValueImage.ImageFactory.Base
         /// <param name="endOrient">终止方位</param>
         protected void orientationFilter(ref Byte[] data, Int32 width, Int32 height, Int32 startOrient, Int32 endOrient, out Byte[] result)
         {
-            Debug.Assert(mathHelper.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
-            if (!mathHelper.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
+            Debug.Assert(valueMath.IsPow2(width), "图片宽度必须为2的幂次方,才能调用该方法");
+            if (!valueMath.IsPow2(width)) { result = (Byte[])data.Clone(); return; }
 
             Complex[] tempComp;
             this.FFT(ref data, width, height, true, out tempComp);
@@ -437,7 +437,7 @@ namespace ValueImage.ImageFactory.Base
                 {
                     list.Add(data[set[j]]);
                 }
-                mathHelper.BubbleSort(list, SortMode.Ascending);
+                valueMath.BubbleSort(list, SortMode.Ascending);
                 Int32 median = list[set.Length / 2];
                 result[i] = Convert.ToByte(median);
                 list.Clear();
@@ -447,8 +447,10 @@ namespace ValueImage.ImageFactory.Base
         /// <summary>
         ///  高斯平滑
         /// </summary>
+        /// <param name="data">二维数据</param>
         /// <param name="borderLength">二维数据边长(必须是正方形)</param>
         /// <param name="sigma">方差</param>
+        /// <param name="result">处理后结果</param>
         protected void gaussSmooth(ref Byte[] data, Int32 borderLength, Double sigma, out Byte[] result)
         {
             if (data.Length / borderLength != borderLength)

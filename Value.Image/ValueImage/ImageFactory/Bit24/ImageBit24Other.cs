@@ -6,6 +6,8 @@ namespace ValueImage.ImageFactory.Bit24
 {
     sealed partial class ImageBit24 : IOther
     {
+        #region IOther 成员
+
         public void InvertColor(System.Drawing.Bitmap srcImage)
         {
             Byte[] rgbBytes = LockBits(srcImage, ImageLockMode.ReadWrite);
@@ -130,6 +132,70 @@ namespace ValueImage.ImageFactory.Bit24
             //}
 
             //UnlockBits(rgbBytes);
+        }
+
+        #endregion
+
+        public System.Drawing.Point[] BlurryNoiseDetect(System.Drawing.Bitmap srcImage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ConvertToBytes(System.Drawing.Bitmap srcImage, out byte[,] data)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+
+            data = new Byte[Height, singleWidth];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    data[i, j] = rgbBytes[i * Width + j * 3];
+                }
+            }
+            UnlockBits(rgbBytes);
+        }
+
+        public void ConvertToBytes(System.Drawing.Bitmap srcImage, out byte[,] datab, out byte[,] datar, out byte[,] datag)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+
+            datab = new Byte[Height, singleWidth];
+            datar = new Byte[Height, singleWidth];
+            datag = new Byte[Height, singleWidth];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    datab[i, j] = rgbBytes[i * Width + j * 3];
+                    datar[i, j] = rgbBytes[i * Width + j * 3 + 1];
+                    datag[i, j] = rgbBytes[i * Width + j * 3 + 2];
+                }
+            }
+            UnlockBits(rgbBytes);
+        }
+
+        public int OffsetAngle(System.Drawing.Bitmap srcImage)
+        {
+            Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
+            Int32 singleWidth = RealWidth / 3;
+            Int32 length = singleWidth * Height;
+            Byte[] tempb = new Byte[length];
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < singleWidth; j++)
+                {
+                    tempb[i * singleWidth + j] = rgbBytes[i * Width + j * 3];
+                }
+            }
+            UnlockBits(rgbBytes);
+            Int32 angle;
+            base.offsetAngle(ref tempb, singleWidth, Height, out angle);
+            return angle;
         }
 
         #endregion

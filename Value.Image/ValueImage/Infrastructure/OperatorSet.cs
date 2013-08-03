@@ -22,7 +22,6 @@ namespace ValueImage.Infrastructure
 
         #endregion
 
-
         #region Sobel算子
 
         public static Int32[] sobelOperatorX = new Int32[] { -1, 0, 1, -2, 0, 2, -1, 0, 1 };

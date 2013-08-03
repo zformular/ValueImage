@@ -11,8 +11,7 @@ namespace ValueImage.ImageFactory.Bit24
 
         public System.Drawing.Bitmap CutRectangle(System.Drawing.Bitmap srcImage, int startRow, int startCol, int endRow, int endCol)
         {
-            Debug.Assert(endCol > startCol && endRow > startRow, "终止坐标必须大于起始坐标");
-            if (endCol < startCol || endRow < startRow) return null;
+            if (endCol <= startCol || endRow <= startRow) return srcImage;
 
             Byte[] rgbBytes = LockBits(srcImage, System.Drawing.Imaging.ImageLockMode.ReadWrite);
             Int32 singleWidth = RealWidth / 3;

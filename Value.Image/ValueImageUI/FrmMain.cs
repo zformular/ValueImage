@@ -11,6 +11,8 @@ using ValueImage;
 using ValueImageUI.FuncForm;
 using ValueImage.Infrastructure;
 using ValueImageUI.FunForm;
+using MathHelper.Infrastructure;
+using System.IO;
 
 namespace ValueImageUI
 {
@@ -376,6 +378,35 @@ namespace ValueImageUI
         private void BtnProjectionHori_Click(object sender, EventArgs e)
         {
             var srcImage = (Bitmap)this.PicShow.Image;
+
+            List<Int32> list = new List<int>();
+
+            for (int i = 1; i < 180; i++)
+            {
+                Int32[] projections = ((IFrequency)valueImage).Projection(srcImage, System.Math.PI / 180 * i, OrientationType.Horizontal);
+                Int32 sum = 0;
+                foreach (var item in projections)
+                {
+                    sum += item;
+                }
+                list.Add(sum);
+            }
+
+            Int32 maxIndex, max = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (max < list[i])
+                {
+                    max = list[i];
+                    maxIndex = i;
+                }
+            }
+
+            Int32[] test = ((IFrequency)valueImage).Projection(srcImage, System.Math.PI - System.Math.PI / 180, OrientationType.Horizontal);
+
+
+
+
             FrmOrientation frmOrientation = new FrmOrientation(projection, OrientationType.Horizontal, srcImage.Width, srcImage.Height);
             frmOrientation.Show();
         }
@@ -397,13 +428,12 @@ namespace ValueImageUI
         {
             var srcImage = (Bitmap)this.PicShow.Image;
             var test = ((IDivision)valueImage).CutRectangle(srcImage, 0, 0, 25, 30);
-            test.Save(@"D:\test.jpg");
         }
 
         private void BtnBinarization_Click(object sender, EventArgs e)
         {
             var srcImage = (Bitmap)this.PicShow.Image;
-            valueImage.Binarization(srcImage, 100);
+            valueImage.Binarization(srcImage, 254);
             this.PicShow.Refresh();
         }
 
@@ -428,16 +458,249 @@ namespace ValueImageUI
             this.PicShow.Refresh();
         }
 
+
+
+        private void convertValue(Byte[,] data)
+        {
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    data[i, j] = data[i, j] == 0 ? (Byte)1 : (Byte)0;
+                }
+            }
+        }
+        private void convertValue(Int32[] data)
+        {
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = data[i] == 0 ? 1 : 0;
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            //var srcImage = (Bitmap)this.PicShow.Image;
-            //valueImage.FillRectangle(srcImage, 0, 0, srcImage.Height / 2, srcImage.Width / 2, Color.White);
+            Bitmap orgImage = (Bitmap)this.PicShow.Image;
+            orgImage.Save("D:\\asdsadsadasddsa.jpg");
+
+            //String name = Path.GetFileName(this.fileName);
+
+            //((IGray)valueImage).ConvertToGrayscale(orgImage, GrayscaleType.Maximum);
+            //((IGray)valueImage).OptimalThreshold(orgImage);
+            //orgImage = ((IBinarization)valueImage).BileanerZoom(orgImage, 40, 40);
+            //orgImage.Save(Path.Combine("D:\\", name));
+
+
+
+
+
+            changeImageForChina();
+
+
+
+
+            //Bitmap orgImage = (Bitmap)this.PicShow.Image;
+            //Int32 angle = ((IOther)valueImage).OffsetAngle(orgImage);
+            //this.PicShow.Image = ((IGeometry)valueImage).BileanerRotate(orgImage, -2);
             //this.PicShow.Refresh();
 
-            var srcImage = (Bitmap)this.PicShow.Image;
-            srcImage.Save("D:\\testets.jpg");
+            //Bitmap orgImage = (Bitmap)this.PicShow.Image;
+            //Int32[] horiProject = ((IFrequency)valueImage).Projection(orgImage, OrientationType.Horizontal);
+
+            //Int32 total = 0;
+            //for (int i = 0; i < horiProject.Length; i++)
+            //{
+            //    total += horiProject[i];
+            //}
+
+            //Int32 median = total / horiProject.Length;
 
 
+            //List<Int32> test = new List<int>();
+            //for (int i = 0; i < horiProject.Length; i++)
+            //{
+            //    if (horiProject[i] > median)
+            //        test.Add(i);
+            //}
+
+
+            //var asd = "asd";
+
+            //Bitmap srcImage = (Bitmap)this.PicShow.Image;
+            //((IGray)valueImage).ConvertToGrayscale(srcImage, GrayscaleType.Maximum);
+            ////((IFilter)valueImage).MedianFilter(srcImage, TemplateType.T3x3);
+            //((IGray)valueImage).OptimalThreshold(srcImage);
+            //((IDisNoise)valueImage).kFillFilter(srcImage);
+            //Int32 angle = ((IOther)valueImage).OffsetAngle(srcImage);
+            //srcImage = ((IGeometry)valueImage).BileanerRotate(srcImage, 90 - angle);
+            //((IGray)valueImage).ConvertToGrayscale(srcImage, GrayscaleType.Maximum);
+            //((IGray)valueImage).OptimalThreshold(srcImage);
+
+            //Int32[] horiProjection = ((IFrequency)valueImage).Projection(srcImage, OrientationType.Horizontal);
+            //Line[] horiLines = SeparatorLine(horiProjection, 255, 1);
+            //Line line = new Line(0, 0);
+            //Int32 max = 0;
+            //for (int i = 0; i < horiLines.Length - 1; i++)
+            //{
+            //    if ((horiLines[i + 1].Start - horiLines[i].End) > max)
+            //    {
+            //        line = new Line(horiLines[i].End, horiLines[i + 1].Start);
+            //        max = (horiLines[i].End - horiLines[i + 1].Start);
+            //    }
+            //}
+            //if (line.End != 0)
+            //    srcImage = ((IDivision)valueImage).CutRectangle(srcImage, line.Start, 0, line.End, srcImage.Width);
+
+            //this.PicShow.Refresh();
+
+            //cutWord(srcImage);
+        }
+
+        private void changeImageForChina()
+        {
+            //Bitmap orgImage = (Bitmap)this.PicShow.Image;
+
+            DirectoryInfo dir = new DirectoryInfo(@"D:\wordtest");
+            foreach (var file in dir.GetFiles())
+            {
+                String filename = file.Name;
+
+                Bitmap orgImage = (Bitmap)Image.FromFile(file.FullName);
+                Bitmap srcImage = (Bitmap)orgImage.Clone();
+                ((IGray)valueImage).ConvertToGrayscale(srcImage, GrayscaleType.Maximum);
+                ((IGray)valueImage).OptimalThreshold(srcImage);
+                Int32[] horiPro = ((IFrequency)valueImage).Projection(srcImage, OrientationType.Horizontal);
+                Int32 startIndex = 0;
+                Int32 endIndex = 0;
+                for (int i = 0; i < horiPro.Length; i++)
+                {
+                    if (horiPro[i] == 255)
+                        startIndex = i;
+                    else
+                        break;
+                }
+                for (int i = horiPro.Length - 1; i >= 0; i--)
+                {
+                    if (horiPro[i] == 255)
+                        endIndex = i;
+                    else
+                        break;
+                }
+
+                Int32 vstartIndex = 0, vendIndex = 0;
+                srcImage = ((IDivision)valueImage).CutRectangle(srcImage, startIndex, 0, endIndex, orgImage.Width);
+                Int32[] vertPro = ((IFrequency)valueImage).Projection(srcImage, OrientationType.Vertical);
+                for (int i = 0; i < vertPro.Length; i++)
+                {
+                    if (vertPro[i] == 255)
+                        vstartIndex = i;
+                    else
+                        break;
+                }
+                for (int i = vertPro.Length - 1; i >= 0; i--)
+                {
+                    if (vertPro[i] == 255)
+                        vendIndex = i;
+                    else
+                        break;
+                }
+
+                orgImage = ((IDivision)valueImage).CutRectangle(orgImage, startIndex + 1, vstartIndex + 1, endIndex, vendIndex);
+                ((IGray)valueImage).ConvertToGrayscale(orgImage, GrayscaleType.Maximum);
+                ((IGray)valueImage).OptimalThreshold(orgImage);
+                orgImage = ((IGeometry)valueImage).BileanerZoom(orgImage, 40, 40);
+                ((IGray)valueImage).ConvertToGrayscale(orgImage, GrayscaleType.Maximum);
+                ((IGray)valueImage).OptimalThreshold(orgImage);
+                orgImage.Save("D:\\wordword\\" + filename);
+            }
+        }
+
+        private void cutWord(Bitmap srcImage)
+        {
+            this.PicShow.Image = srcImage;
+            this.PicShow.Refresh();
+            Int32[] frequency = ((IFrequency)valueImage).Projection(srcImage, OrientationType.Vertical);
+            Line[] lines = SeparatorLine(frequency, 250, 1);
+
+            List<Bitmap> srcMaps = new List<Bitmap>();
+            for (int i = 0; i < lines.Length - 1; i++)
+            {
+                Bitmap temp = ((IDivision)valueImage).CutRectangle(srcImage, 0, lines[i].End, srcImage.Height, lines[i + 1].Start);
+
+                if (temp.Width > 20)
+                {
+                    srcMaps.Add(((IDivision)valueImage).CutRectangle(temp, 0, 0, srcImage.Height, temp.Width / 2));
+                    srcMaps.Add(((IDivision)valueImage).CutRectangle(temp, 0, temp.Width / 2, srcImage.Height, temp.Width));
+                }
+                else
+                    srcMaps.Add(temp);
+            }
+            Int32[] horifrequency;
+
+            DirectoryInfo dir = new DirectoryInfo("D:\\numbertest");
+            FileInfo[] files = dir.GetFiles();
+            Int32 startNum = files.Length;
+            for (int i = 0; i < srcMaps.Count; i++)
+            {
+                if (srcMaps[i].Width <= 4) continue;
+
+                horifrequency = ((IFrequency)valueImage).Projection(srcMaps[i], OrientationType.Horizontal);
+                Line[] horilines = SeparatorLine(horifrequency, 250, 1);
+                if (horilines.Length == 2)
+                    srcMaps[i] = ((IDivision)valueImage).CutRectangle(srcMaps[i], horilines[0].End, 0, horilines[1].Start + 1, srcMaps[i].Width);
+                else if (horilines.Length == 3)
+                    srcMaps[i] = ((IDivision)valueImage).CutRectangle(srcMaps[i], horilines[1].End, 0, horilines[2].Start + 1, srcMaps[i].Width);
+
+
+                srcMaps[i] = ((IGeometry)valueImage).BileanerZoom(srcMaps[i], 9, 12);
+
+                srcMaps[i].Save("D:\\numbertest\\" + startNum + ".jpg");
+                startNum++;
+            }
+        }
+
+        /// <summary>
+        ///  获得分割线
+        /// </summary>
+        /// <param name="projection">投影数组</param>
+        /// <param name="thresholding">分割阈值</param>
+        /// <param name="leastWidth">最小宽度</param>
+        private Line[] SeparatorLine(Int32[] projection, Int32 thresholding, Int32 leastWidth)
+        {
+            List<Line> lines = new List<Line>();
+            Int32 start = -1;
+            Int32 count = 0;
+            for (int i = 0; i < projection.Length; i++)
+            {
+                if (projection[i] >= thresholding)
+                    start = i;
+                else
+                    start = -1;
+                if (start != -1) count++;
+                else
+                {
+                    if (count >= leastWidth)
+                        lines.Add(new Line(i - count, i));
+                    start = -1;
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                lines.Add(new Line(start - count, start));
+            return lines.ToArray();
+        }
+
+
+        private class Line
+        {
+            public Line(Int32 start, Int32 end)
+            {
+                this.Start = start;
+                this.End = end;
+            }
+
+            internal Int32 Start { get; set; }
+
+            internal Int32 End { get; set; }
         }
 
         private void BtnUniformQuantization_Click(object sender, EventArgs e)
@@ -487,6 +750,96 @@ namespace ValueImageUI
             this.PicShow.Refresh();
         }
 
+        private void BtnGabor_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            GaborParam parma = new GaborParam
+            {
+                Gamma = 0.5,
+                Theta = 0.5,
+                Lambda = 0.5,
+                Sigma = 0.5,
+                Psi = 0.5
+            };
+            ((IFrequency)valueImage).Gabor(srcImage, parma);
+            this.PicShow.Refresh();
+        }
 
+        private void BtnSplice_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            var infos = new ImageInfo[5];
+            for (int i = 0; i < infos.Length; i++)
+            {
+                infos[i] = new ImageInfo();
+                infos[i].OrgImage = srcImage;
+                infos[i].Location = new Point(srcImage.Width * (i + 1) + 20 * i, 40);
+                infos[i].Size = new Size(srcImage.Width + 30, srcImage.Height + 30);
+            }
+            Bitmap image = ((IGeometry)valueImage).SpliceImage(infos);
+            this.PicShow.Image = image;
+            this.PicShow.Refresh();
+        }
+
+        private void BtnkFill_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            ((IDisNoise)valueImage).kFillFilter(srcImage);
+            this.PicShow.Refresh();
+        }
+
+        private void BtnDensity_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            Rectangle[] rects = ((IFrequency)valueImage).Density(srcImage, 50);
+            foreach (var item in rects)
+            {
+                ((IGeometry)valueImage).FillRectangle(srcImage, item.Y, item.X, item.Y + item.Height, item.X + item.Width, Color.LightBlue);
+            }
+
+            this.PicShow.Refresh();
+        }
+
+        private void BtnBoxImage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnRotate_Click(object sender, EventArgs e)
+        {
+            //for (int i = 0; i < 32; i++)
+            //{
+            var srcImage = (Bitmap)this.PicShow.Image;
+            //this.PicShow.Image = ((IGeometry)valueImage).BileanerRotate(srcImage, 90);
+            //this.PicShow.Image.Save("D:\\TEST.JPG");
+            //}
+            this.PicShow.Refresh();
+        }
+
+        private void BtnFillBreakpoint_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            ((IBinarization)valueImage).FillBreakpoint(srcImage, FilterLevelType.Level01);
+            this.PicShow.Refresh();
+        }
+
+        private void BtnNoiseKiller_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            ((IBinarization)valueImage).NosieKiller(srcImage, FilterLevelType.Level02);
+            this.PicShow.Refresh();
+        }
+
+        private void BtnShewCorrection_Click(object sender, EventArgs e)
+        {
+            var srcImage = (Bitmap)this.PicShow.Image;
+            this.PicShow.Image = ((IBinarization)valueImage).ShewCorrection(srcImage, ShewDetectionType.Projection);
+            this.PicShow.Refresh();
+        }
+
+        //private void rotate(Bitmap srcImage, Double angle, out Bitmap result)
+        //{
+        //    //result = new Bitmap()
+        //}
     }
 }

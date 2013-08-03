@@ -32,12 +32,6 @@ namespace ValueImage.ImageFactory.Bit24
             return base.LockBits(srcImage, mode);
         }
 
-        public override void Dispose()
-        {
-            instance = null;
-            base.Dispose();
-        }
-
         /// <summary>
         ///  创建图片
         /// </summary>

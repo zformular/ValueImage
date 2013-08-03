@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\DynamicLink\ValueImage.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DynamicLink\MathHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -39,10 +44,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ValueMathHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DynamicLink\ValueMathHelper.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageFactory\Base\ImageBase.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="ImageFactory\Base\ImageBaseNoise.cs" />
     <Compile Include="ImageFactory\Base\ImageBaseOther.cs" />
     <Compile Include="ImageFactory\Bit24\ImageBit24.cs" />
+    <Compile Include="ImageFactory\Bit24\ImageBit24Binarization.cs" />
     <Compile Include="ImageFactory\Bit24\ImageBit24DisNoise.cs" />
     <Compile Include="ImageFactory\Bit24\ImageBit24Division.cs" />
     <Compile Include="ImageFactory\Bit24\ImageBit24Edge.cs" />
@@ -67,17 +69,21 @@
     <Compile Include="ImageFactory\Bit24\ImageBit24Other.cs" />
     <Compile Include="Infrastructure\ColorBytes.cs" />
     <Compile Include="Infrastructure\DirectType.cs" />
+    <Compile Include="Infrastructure\FilterLevelType.cs" />
     <Compile Include="Infrastructure\FilterWindowType.cs" />
     <Compile Include="Infrastructure\GaussFilterType.cs" />
     <Compile Include="Infrastructure\GrayscaleType.cs" />
+    <Compile Include="Infrastructure\ImageInfo.cs" />
     <Compile Include="Infrastructure\MaskType.cs" />
     <Compile Include="Infrastructure\OperatorSet.cs" />
     <Compile Include="Infrastructure\OrientationType.cs" />
+    <Compile Include="Infrastructure\ShewDetectionType.cs" />
     <Compile Include="Infrastructure\TemplateType.cs" />
     <Compile Include="Infrastructure\NoiseType.cs" />
     <Compile Include="Infrastructure\RateFilterType.cs" />
     <Compile Include="Infrastructure\WaveletLowpassType.cs" />
     <Compile Include="Infrastructure\ZoomType.cs" />
+    <Compile Include="Interface\IBinarization.cs" />
     <Compile Include="Interface\IDisNoise.cs" />
     <Compile Include="Interface\IDivision.cs" />
     <Compile Include="Interface\IEdge.cs" />

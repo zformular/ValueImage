@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace ValueImage.Infrastructure
 {
+    /// <summary>
+    ///  存储颜色的比特值分量
+    /// </summary>
     public class ColorBytes
     {
         public ColorBytes() { }

@@ -62,5 +62,10 @@ namespace ValueImage.Interface
         /// </summary>
         /// <param name="template">模板集合</param>
         void GrayMorphologic(Bitmap srcImage, Byte[] template);
+
+        /// <summary>
+        ///  kFill滤波器
+        /// </summary>
+        void kFillFilter(Bitmap srcImage);
     }
 }
